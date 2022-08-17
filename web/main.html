@@ -1,0 +1,310 @@
+<html>
+<head>
+<title>Launcher</title>
+
+<link rel="stylesheet" href="rain.css">
+<link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<link rel="icon" type="image/png" href="logo.png">
+
+
+<script type="text/javascript" src="/eel.js"></script>
+<script>
+var infotext = `====================
+Launcher by SKISTE
+      v1.9
+====================
+Небольшая программа, написанная независимым разработчиком(SKISTE), для личного или некоммерческого использования
+Температура показывается в городе \'Балаково\', если потребуется какой то другой город, то просто кликни и напиши свой город без ошибок
+По всем вопросам обращайтесь ко мне в личные сообщения в вк, мой ник в шапке кликабелен
+====================`;
+var historyv = `v 0.d: Собран макет как оно будет все работать
+v 0.1: Макет был допилен и исправлены баги
+v 0.2: Придуман интерфейс
+v 0.3: Сделан блок для выключения пк через n время
+v 0.4: Допилил полностью функцию выключения пк
+v 0.5: Добавлена фунция запуска бомбера и перезапуска explorer.exe
+v 0.6: Перелопачен интерфейс и создана функция генерации символов с директорией
+v 1.0: Создана функция KeyLogger, и подсказка для него, опять перелопачен интерфейс, добавлена шапка
+v 1.1: Добавлена возможность смены темы дня и ночи в зависимости от времени, опять изменения интерфейсa
+v 1.2: Сделан блок с информацией через alert
+v 1.3: Сделан блок с температурой
+v 1.4: Багофиксы
+v 1.5: Убрана возможность выбора директории в генерации символов из за несовместимости библиотек, в будущем этот вопрос будет решаться
+v 1.6: Очередные багофиксы
+v 1.7: Добавлена возможность менять свой город по нажатию на температуру
+v 1.8: Добавлена функция рандомного числа
+v 1.9: Изменения дождя на фоне`;
+var black = 0;
+var leng = 0;
+var cityjs = 'Балаково';
+// Функция предзагрузки
+function preload(){
+	console.log('Preload start');
+// Появление подсказки для кейлоггера
+	async function hintttt(){
+		console.log('Начало функции hint()');
+		setTimeout('document.getElementById("hintforkeylogger").style.opacity="1"', 1000);
+}
+	// Вызов функции появления кейлоггера
+	hintttt();
+	// Введение данных температуры в блок
+	eel.expose(weatherwait);
+	function weatherwait(){
+		console.log('Начало функции weatherwait()');
+		document.getElementById('weather').innerHTML="⌛";
+	}
+
+	eel.expose(weatherjs);
+	function weatherjs(temp){
+		console.log('Nachalo function weatherjs(temp)'+temp);
+		var temp1 = temp
+		setTimeout(document.getElementById('weather').innerHTML=temp1,1000);
+	}
+
+	// Проверка времени и применение стиля относительно этих данных
+	var date = new Date();
+	var hours = date.getHours();
+	console.log('Получение времени');
+	if (hours <= 8){
+		console.log('Время меньше 8');
+		document.getElementById('night').innerHTML="🌝";
+		blacknum();
+	}
+	else if(hours >= 22){
+		console.log('Время больше 22');
+		document.getElementById('night').innerHTML="🌝";
+		blacknum();
+	}
+	// Активируем функцию убирания блока информации
+	removeinformation();
+	console.log('Начало функции removeinformation()');
+	console.log('Preload end');
+	setTimeout("eel.weather('Балаково')",1);
+}
+function updateweather(){
+	city='Балаково'
+	console.log('Запрос города');
+	city = prompt('Ваш город?','');
+	console.log('Город: '+city+", запуск функции ввода города");
+	eel.weather(city);
+}
+function shtdwm(){
+	console.log('Начало функции shtdwm()');
+	document.getElementById('shtdwn1').style.opacity="0.1";
+	setTimeout('document.getElementById("shtdwn1").style.opacity="1"', 200);
+	var min = document.getElementById("shtdwn").value;
+	min = min*60;
+	String(min);
+	eel.shtdwm(min);
+	clk()
+	console.log('Конец функции');
+	}
+function bomber(){
+	console.log('Начало функции bomber()');
+	console.warn('Функция не выключится, пока вы не выключите консоль с бомбером');
+	document.getElementById('bmb').style.opacity="0.1";
+	setTimeout('document.getElementById("bmb").style.opacity="1"', 200);
+	eel.bomber()
+	console.log('Конец функции');
+}
+function explrld(){
+	console.log('Начало функции explrld()');
+	document.getElementById('explrld').style.opacity="0.1";
+	setTimeout('document.getElementById("explrld").style.opacity="1"', 200);
+	eel.explorerrst();
+	console.log('Конец функции');
+}
+function gensym(){
+	console.log('Начало функции gensym()');
+	document.getElementById('symbtn').style.opacity="0.1";
+	setTimeout('document.getElementById("symbtn").style.opacity="1"', 200);
+	var symstart = document.getElementById("symstart").value;
+	var symend = document.getElementById("symend").value;
+	eel.symgen(symstart,symend);
+	console.log('Конец функции');
+}
+function getrandomnum(){
+	console.log('Начало функции getrandomnum()');
+	document.getElementById("rngtext").style.display="block";
+	document.getElementById("rngtext").style.background="#ffffff00";
+	setTimeout('document.getElementById("rngtext").style.opacity="1"',1);
+	var max = document.getElementById("rngstart").value;
+	var min = document.getElementById("rngend").value;
+	if (max == 0 & min == 0 | min >= max){
+		console.warn('Неверно введены данные');
+		document.getElementById('rngtext').innerHTML='❌';
+	}
+	else{
+		var rngvalue = min-0.5+Math.random()*(max - min + 1);
+		document.getElementById('rngtext').innerHTML=Math.round(rngvalue);
+		console.log('Итог: '+rngvalue);
+		console.log('Округление до: '+Math.round(rngvalue));
+	}
+	console.log('Конец функции');
+}
+function rainlen(){
+	console.log('Начало функции rainlen()');
+	var i=0;
+	if (leng == 0){
+	while (i != 149) {
+		i++;
+		leng = 1;
+		document.getElementsByClassName('rain')[i].style.height="50px";
+	}}
+	else{
+		while (i != 149) {
+		i++;
+		leng = 0;
+		document.getElementsByClassName('rain')[i].style.height="200px";
+	}}
+	i=0;
+	console.log('Конец функции');
+}
+function blacknum(){
+	console.log('Начало функции blacknum()');
+	if(black==0){
+		console.warn('Включение темной темы');
+		// Ночь
+		// Все блоки
+		// document.getElementById('block1').style.background="#ffffff00";
+		// Все заголовки
+		document.getElementById('text1').style.color="#ffffff";
+		document.getElementById('text2').style.color="#ffffff";
+		document.getElementById('text3').style.color="#ffffff";
+		document.getElementById('text4').style.color="#ffffff";//hintforkeylogger
+		document.getElementById('text5').style.color="#ffffff";
+		document.getElementById('jopa1').style.color="#ffffff";
+		document.getElementById('jopa2').style.color="#ffffff";
+		document.getElementById('text6').style.color="#ffffff";
+		document.getElementById('hintforkeylogger').style.color="#ffffff";
+		document.getElementById('information').style.fill="#ffffff";
+		document.getElementById('black').style.opacity="0.9";
+		document.getElementById('header').style.color="#ffffff";
+		document.getElementById('rngtext').style.color="#ffffff";
+		document.querySelector("#header > a").style.color="#ffffff";
+		document.getElementById('night').innerHTML="🌝";
+		var i=0;
+		while (i != 149) {
+			i++;
+			document.getElementsByClassName('rain')[i].style.background="linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%)";
+		}
+		i=0;
+		black+=1;
+	}
+	else{
+		console.warn('Включение светлой темы');
+		// День
+		// Все заголовки
+		document.getElementById('text1').style.color="#000000";
+		document.getElementById('text2').style.color="#000000";
+		document.getElementById('text3').style.color="#000000";
+		document.getElementById('text4').style.color="#000000";
+		document.getElementById('text5').style.color="#000000";
+		document.getElementById('text6').style.color="#000000";
+		document.getElementById('jopa1').style.color="#000000";
+		document.getElementById('jopa2').style.color="#000000";
+		document.getElementById('rngtext').style.color="#000000";
+		document.getElementById('information').style.fill="#000000";
+		document.getElementById('hintforkeylogger').style.color="#000000";
+		document.getElementById('black').style.opacity="0.2";
+		document.getElementById('header').style.color="#000000";
+		document.querySelector("#header > a").style.color="#000000";
+		document.getElementById('night').innerHTML="🌚";
+		var i=0;
+		while (i != 149) {
+			i++;
+			document.getElementsByClassName('rain')[i].style.background="linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #000000 100%)";
+		}
+		i=0;
+		black-=1;
+	}
+	console.log('Конец функции');
+}
+async function removeinformation(){
+	console.log('Запуск функции removeinformation()');
+	setTimeout('document.getElementById("information").style.opacity="0"', 60000);
+	setTimeout('document.getElementById("information").style.display="none"', 61000);
+	
+}
+function keylog(){
+	console.log('Запуск функции keylog()');
+	document.getElementById('keylog').style.opacity="0.1";
+	setTimeout('document.getElementById("keylog").style.opacity="1"', 200);
+	eel.keyloggcreate();
+	eel.keylogg();
+	console.log('Конец функции');
+}
+
+</script>
+
+</head>
+<body onload="preload()">
+<div class="black" id="black"></div>
+<div id="header" class="animate__animated animate__lightSpeedInLeft animate__delay-2s">Launcher by <a href="https://vk.com/skiste">SKISTE</a><div id="weather" class="temperature" onclick="updateweather()">🌡</div>  
+	<div id="night" onclick="blacknum()">🌚
+	</div>
+
+<svg id="information" class="text" onclick="alert(infotext); alert(historyv)" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="476.522px" height="476.523px" viewBox="0 0 476.522 476.523" style="enable-background:new 0 0 476.522 476.523;"
+	 xml:space="preserve"><g><g><path d="M218.442,335.463c-8.711,2.55-14.353,9.593-18.258,17.423c-4.065,8.16-7.01,17.529-5.164,26.68c1.046,5.18,3.313,11.07,6.205,15.508c12.535,19.23,36.767,21.734,55.969,11.878c19.805-10.166,29.808-33.937,14.468-52.242C260.109,340.913,236.538,330.172,218.442,335.463z M247.643,390.605c-10.836,6.475-24.351,3.697-31.229-6.85c-4.39-6.733-3.667-16.92,0.536-23.445c4.829-7.5,13.729-6.85,21.32-4.864c5.682,1.487,11.08,4.229,15.594,7.987C265.71,373.315,258.972,383.836,247.643,390.605z"/><path d="M174.337,171.161c5.614,8.369,16.732,5.581,20.449-0.97c15.305-12.538,47.032-28.622,57.351-2.684c11.339,28.515-25.458,42.216-46.981,45.146c-6.426,0.874-8.787,5.662-8.195,10.56c-0.155,0.854-0.234,1.757-0.196,2.74c1.102,27.411,1.137,54.842,1.143,82.273c0,1.198,0.198,2.275,0.48,3.275c-0.604,6.114,3.019,12.726,10.945,12.721c17.194-0.011,34.335-0.178,51.422-2.285c1.844-0.229,3.453-0.803,4.829-1.625c5.211-0.559,10.024-4.174,10.024-10.943v-50.53c46.382-27.851,92.252-85.887,67.11-141.955c-33.459-74.646-143.585-46.058-197.424-16.199c-3.156,1.747-4.829,4.252-5.396,6.931c-3.293,4.134-4.44,10.349-0.345,15.584C151.728,138.763,163.328,154.751,174.337,171.161z M321.573,125.253c24.08,46.352-27.07,97.373-63.154,117.115c-4.611,2.524-6.068,6.647-5.505,10.608c-0.066,0.508-0.152,0.995-0.152,1.544v45.346c-10.648,0.96-21.315,1.352-32.007,1.447c-0.02-22.708-0.14-45.412-0.904-68.113c19.098-3.974,36.683-12.598,48.48-28.868c9.765-13.479,10.831-32.057,4.153-46.997c-6.713-15.023-21.368-24.758-37.58-26.317c-18.04-1.736-34.71,6.246-48.853,16.925c-7.333-10.498-14.972-20.773-22.739-30.955C207.905,94.308,292.934,70.125,321.573,125.253z"/><path d="M239.059,474.214c130.938,0,237.464-106.525,237.464-237.456c0-29.546-8.938-67.37-23.917-101.179C415.643,52.128,337.03,2.308,242.326,2.308c-42.724,0-85.779,10.648-124.517,30.792C43.701,71.643-2.501,152.743,0.104,239.721c1.239,41.367,14.622,81.869,38.714,117.11C92.803,435.82,158.306,474.214,239.059,474.214z M132.203,60.781c34.307-17.847,72.387-27.274,110.119-27.274c81.989,0,149.938,42.883,181.756,114.709c13.102,29.582,21.241,63.51,21.241,88.542c0,113.731-92.525,206.257-206.265,206.257c-69.678,0-126.747-33.951-174.482-103.783c-20.715-30.316-32.222-65.044-33.284-100.44C29.079,164.859,69.632,93.326,132.203,60.781z"/></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg><div id="rainbtn" class="rainbtncls" onclick="rainlen()">⛆</div></div>
+<!-- rain -->
+<i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i><i class="rain"></i>
+
+<!-- Delay Shutdown -->
+
+<div class="block" id="block1">
+<div id="text1" class="animate__animated animate__fadeInUp text">Delay Shutdown</div>
+<input type="text" class="textpole" id="shtdwn" style="width:60px;">
+<input type="button" class="btnpole" id="shtdwn1" value="Launch" onclick="shtdwm()">
+</div>
+
+<!-- BOMBER -->
+
+<div class="block" id="block2" style="margin-left:210px; margin-top:-200px;">
+<div id="text2" class="animate__animated animate__fadeInUp text">Launch b0mb3r</div>
+<input type="button" class="btnpole" style="top: 50%;" id="bmb" value="START" onclick="bomber()">
+</div>
+
+<!-- explorer.exe -->
+
+<div class="block" id="block3" style="margin-left:420px; margin-top:-200px;">
+<div id="text3" class="animate__animated animate__fadeInUp text">Reload explorer.exe</div>
+<input type="button" class="btnpole" style="top: 50%;" id="explrld" value="RELOAD" onclick="explrld()">
+</div>
+
+
+
+<!-- KeyLogger -->
+
+<div class="block" id="block4" data-title="Софийский собор" style="margin-top:10px;">
+<div id="text4" class="animate__animated animate__fadeInUp text">KeyLogger</div>
+<input type="button" class="btnpole" style="top: 50%;" id="keylog" value="Start" onclick="keylog()">
+<div id="hintforkeylogger" class="hint" data-title="Для выключения нажмите несколько раз на правый Ctrl(Сделано для защиты от случайных нажатий)" style="left:87%; top: -11%; font-size: 15px;	user-select: none;text-shadow: 0px 0px 4px #ffffff;position: relative;font-size:20px;transition: 1s;font-family:Comic Sans MS;opacity:0;text-align:center;">۝</div>
+</div>
+
+<!-- Symbols -->
+
+<div class="block" id="block5" style="margin-left:210px; margin-top:-200px;">
+<div id="text5" class="animate__animated animate__fadeInUp text">Generate Symbols</div>
+<input type="text" class="textpole" id="symstart" style="width:60px; left:30%">
+<input type="text" class="textpole" id="symend" style="width:60px; left:70%"> 
+<p style="left:50%; top:45%;transition: 1s;" class="textpole" id="jopa1">-</p>
+<input type="button" class="btnpole" style="width:60%" id="symbtn" value="GENERATE" onclick="gensym()">
+</div>
+
+<!-- Random -->
+
+<div class="block" id="block6" style="margin-left:420px; margin-top:-200px;">
+<div id="text6" class="animate__animated animate__fadeInUp text">Random</div>
+<input type="text" class="textpole" id="rngend" style="width:60px; left:30%">
+<input type="text" class="textpole" id="rngstart" style="width:60px; left:70%"> 
+<p style="left:50%; top:45%;transition: 1s;" class="textpole" id="jopa2">-</p>
+<div id="rngtext" class="text" style="opacity: 0;user-select: text; transition: 1s;display: none;z-index: 220;background: white;">А хуле ты тут делаешь блять? Кто тебя сука пускал сюда блять? А ну сьебался отсюда блять, тебе здесь не рады, и вообще ты приемный</div>
+<input type="button" class="btnpole" style="width:60%" id="symbtn" value="GENERATE" onclick="getrandomnum()">
+</div>
+
+
+</body>
+</html>
